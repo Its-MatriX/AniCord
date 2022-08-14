@@ -31,6 +31,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
     IsCkecking = False
     IsPinned = False
     MainButtonHover = False
+    IsPaschal = False
     RandomColors = [
         'rgb(71, 82, 196)', 'rgb(59, 165, 93)', 'rgb(237, 66, 69)',
         'rgb(250, 168, 26)', 'rgb(178, 80, 167)'
@@ -510,6 +511,11 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
         time.sleep(3)
 
+        if self.IsPaschal:
+            return
+
+        self.IsPaschal = True
+
         while self.MainButtonHover:
             for color in self.RandomColors:
                 if not self.MainButtonHover:
@@ -525,6 +531,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                 })
 
                 time.sleep(.2)
+
+        self.IsPaschal = False
 
         self.WorkerButton.setStyleSheet(
             "background-color: rgb(88, 101, 242);\n"
