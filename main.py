@@ -3,6 +3,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from sys import argv
 from os import _exit
+from os.path import split, sep
 import threading
 import discontrol
 import requests
@@ -35,7 +36,8 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
         Window.setMinimumSize(QtCore.QSize(325, 360))
         Window.setMaximumSize(QtCore.QSize(1000, 1000))
         Window.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        self.setWindowIcon(QtGui.QIcon('icon.png'))
+        folder = split(__file__)[0] + sep
+        self.setWindowIcon(QtGui.QIcon(folder + 'icon.png'))
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.CentralWidget = QtWidgets.QWidget(Window)
         self.CentralWidget.setObjectName("CentralWidget")
@@ -378,6 +380,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
         while self.IsWorking:
             for line in lines:
+                if not self.IsWorking:
+                    return
                 client.set_status_text(line)
                 time.sleep(delay)
 
