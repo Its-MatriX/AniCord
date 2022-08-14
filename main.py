@@ -10,17 +10,17 @@ import requests
 import time
 
 
-class HoverButton(QtWidgets.QPushButton):
-    hover = QtCore.pyqtSignal(str)
+class PYQTHoverButton(QtWidgets.QPushButton):
+    HoverSignal = QtCore.pyqtSignal(str)
 
     def __init__(self, parent=None):
-        super(HoverButton, self).__init__(parent)
+        super(PYQTHoverButton, self).__init__(parent)
 
     def enterEvent(self, event):
-        self.hover.emit('enterEvent')
+        self.HoverSignal.emit('enterEvent')
 
     def leaveEvent(self, event):
-        self.hover.emit('leaveEvent')
+        self.HoverSignal.emit('leaveEvent')
 
 
 class Ui_ApplicationWindow(QtWidgets.QMainWindow):
@@ -32,9 +32,9 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
 
     def InitWindow(self, Window):
         Window.setObjectName("Window")
-        Window.resize(326, 386)
-        Window.setMinimumSize(QtCore.QSize(325, 360))
-        Window.setMaximumSize(QtCore.QSize(1000, 1000))
+        Window.resize(326, 355)
+        Window.setMinimumSize(QtCore.QSize(325, 355))
+        Window.setMaximumSize(QtCore.QSize(1000, 355))
         Window.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         folder = split(__file__)[0] + sep
         self.setWindowIcon(QtGui.QIcon(folder + 'icon.png'))
@@ -42,21 +42,13 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
         self.CentralWidget = QtWidgets.QWidget(Window)
         self.CentralWidget.setObjectName("CentralWidget")
         self.MainBackground = QtWidgets.QLabel(self.CentralWidget)
-        self.MainBackground.setGeometry(QtCore.QRect(0, 10, 326, 331))
+        self.MainBackground.setGeometry(QtCore.QRect(0, 10, 326, 301))
         self.MainBackground.setStyleSheet(
             "background-color: rgb(54, 57, 63);\n"
             "border-radius: 10")
-        self.MainBackground.setText("")
         self.MainBackground.setObjectName("MainBackground")
-        self.MainTitle = QtWidgets.QLabel(self.CentralWidget)
-        self.MainTitle.setGeometry(QtCore.QRect(0, 40, 321, 36))
-        self.MainTitle.setStyleSheet("color: rgb(255, 255, 255);\n"
-                                     "font: 87 14pt \"Segoe UI Black\";")
-        self.MainTitle.setAlignment(QtCore.Qt.AlignCenter)
-        self.MainTitle.setObjectName("MainTitle")
         self.TokenInput = QtWidgets.QLineEdit(self.CentralWidget)
-        self.TokenInput.setGeometry(QtCore.QRect(20, 105, 281, 31))
-        self.TokenInput.setToolTip("")
+        self.TokenInput.setGeometry(QtCore.QRect(20, 75, 281, 31))
         self.TokenInput.setStyleSheet("border-radius: 3;\n"
                                       "color: rgb(8, 138, 90);\n"
                                       "background-color: rgb(32, 34, 37);\n"
@@ -66,7 +58,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
         self.TokenInput.setPlaceholderText("")
         self.TokenInput.setObjectName("TokenInput")
         self.AuthInputHint = QtWidgets.QLabel(self.CentralWidget)
-        self.AuthInputHint.setGeometry(QtCore.QRect(20, 80, 306, 21))
+        self.AuthInputHint.setGeometry(QtCore.QRect(20, 50, 306, 21))
         self.AuthInputHint.setStyleSheet("color: rgb(175, 177, 181);\n"
                                          "font: 87 8pt \"Segoe UI Black\";")
         self.AuthInputHint.setAlignment(QtCore.Qt.AlignLeading
@@ -74,7 +66,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
                                         | QtCore.Qt.AlignVCenter)
         self.AuthInputHint.setObjectName("AuthInputHint")
         self.StatusInputHint = QtWidgets.QLabel(self.CentralWidget)
-        self.StatusInputHint.setGeometry(QtCore.QRect(20, 150, 306, 21))
+        self.StatusInputHint.setGeometry(QtCore.QRect(20, 120, 306, 21))
         self.StatusInputHint.setStyleSheet("color: rgb(175, 177, 181);\n"
                                            "font: 87 8pt \"Segoe UI Black\";")
         self.StatusInputHint.setAlignment(QtCore.Qt.AlignLeading
@@ -82,7 +74,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
                                           | QtCore.Qt.AlignVCenter)
         self.StatusInputHint.setObjectName("StatusInputHint")
         self.Statuses = QtWidgets.QPlainTextEdit(self.CentralWidget)
-        self.Statuses.setGeometry(QtCore.QRect(20, 175, 281, 101))
+        self.Statuses.setGeometry(QtCore.QRect(20, 145, 281, 101))
         self.Statuses.setStyleSheet("border-radius: 3;\n"
                                     "background-color: rgb(32, 34, 37);\n"
                                     "padding-left: 3;\n"
@@ -90,8 +82,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
                                     "padding-right: 3;\n"
                                     "padding-top: 3;\n"
                                     "color: rgb(255, 255, 255);\n"
-                                    "font: 87 8pt \"Segoe UI Black\";"
-                                    """""")
+                                    "font: 87 8pt \"Segoe UI Black\";")
         self.Statuses.setCenterOnScroll(False)
         self.VerticalScrollBar = QtWidgets.QScrollBar()
         self.VerticalScrollBar.setStyleSheet("""
@@ -149,7 +140,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.Statuses.setPlaceholderText("")
         self.Statuses.setObjectName("Statuses")
         self.DelayHint = QtWidgets.QLabel(self.CentralWidget)
-        self.DelayHint.setGeometry(QtCore.QRect(20, 290, 71, 16))
+        self.DelayHint.setGeometry(QtCore.QRect(20, 260, 71, 16))
         self.DelayHint.setStyleSheet("color: rgb(175, 177, 181);\n"
                                      "font: 87 8pt \"Segoe UI Black\";")
         self.DelayHint.setAlignment(QtCore.Qt.AlignLeading
@@ -157,7 +148,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                     | QtCore.Qt.AlignVCenter)
         self.DelayHint.setObjectName("DelayHint")
         self.DelayInput = QtWidgets.QDoubleSpinBox(self.CentralWidget)
-        self.DelayInput.setGeometry(QtCore.QRect(90, 288, 26, 21))
+        self.DelayInput.setGeometry(QtCore.QRect(90, 258, 26, 21))
         self.DelayInput.setStyleSheet("border-radius: 3;\n"
                                       "background-color: rgb(32, 34, 37);\n"
                                       "padding-left: 2;\n"
@@ -166,14 +157,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.DelayInput.setWrapping(False)
         self.DelayInput.setButtonSymbols(QtWidgets.QAbstractSpinBox.NoButtons)
         self.DelayInput.setAccelerated(False)
-        self.DelayInput.setPrefix("")
         self.DelayInput.setDecimals(1)
         self.DelayInput.setMinimum(0.1)
         self.DelayInput.setMaximum(9.9)
         self.DelayInput.setSingleStep(0.1)
         self.DelayInput.setObjectName("DelayInput")
         self.DelayHintSecText = QtWidgets.QLabel(self.CentralWidget)
-        self.DelayHintSecText.setGeometry(QtCore.QRect(120, 290, 26, 16))
+        self.DelayHintSecText.setGeometry(QtCore.QRect(120, 260, 26, 16))
         self.DelayHintSecText.setStyleSheet("color: rgb(175, 177, 181);\n"
                                             "font: 87 8pt \"Segoe UI Black\";")
         self.DelayHintSecText.setAlignment(QtCore.Qt.AlignLeading
@@ -181,14 +171,14 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                            | QtCore.Qt.AlignVCenter)
         self.DelayHintSecText.setObjectName("DelayHintSecText")
         self.ButtonsBackground = QtWidgets.QLabel(self.CentralWidget)
-        self.ButtonsBackground.setGeometry(QtCore.QRect(0, 325, 326, 61))
+        self.ButtonsBackground.setGeometry(QtCore.QRect(0, 295, 326, 61))
         self.ButtonsBackground.setStyleSheet(
             "background-color: rgb(47, 49, 54);\n"
             "border-radius: 10")
         self.ButtonsBackground.setText("")
         self.ButtonsBackground.setObjectName("ButtonsBackground")
-        self.WorkerButton = HoverButton(self.CentralWidget)
-        self.WorkerButton.setGeometry(QtCore.QRect(210, 340, 96, 31))
+        self.WorkerButton = PYQTHoverButton(self.CentralWidget)
+        self.WorkerButton.setGeometry(QtCore.QRect(210, 310, 96, 31))
         self.WorkerButton.setCursor(QtGui.QCursor(
             QtCore.Qt.PointingHandCursor))
         self.WorkerButton.setStyleSheet(
@@ -197,8 +187,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             "color: rgb(255, 255, 255);\n"
             "font: 87 8pt \"Segoe UI Black\";")
         self.WorkerButton.setObjectName("WorkerButton")
-        self.QuitButton = HoverButton(self.CentralWidget)
-        self.QuitButton.setGeometry(QtCore.QRect(135, 340, 71, 31))
+        self.QuitButton = PYQTHoverButton(self.CentralWidget)
+        self.QuitButton.setGeometry(QtCore.QRect(135, 310, 71, 31))
         self.QuitButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.QuitButton.setStyleSheet("background-color: rgb(47, 49, 54);\n"
                                       "border-radius: 3;\n"
@@ -210,9 +200,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.PanelBackground.setStyleSheet(
             "background-color: rgb(47, 49, 54);\n"
             "border-radius: 10")
-        self.PanelBackground.setText("")
         self.PanelBackground.setObjectName("PanelBackground")
-        self.ActionClose = HoverButton(self.CentralWidget)
+        self.ActionClose = PYQTHoverButton(self.CentralWidget)
         self.ActionClose.setGeometry(QtCore.QRect(290, 5, 31, 26))
         self.ActionClose.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.ActionClose.setStyleSheet("background-color: rgb(233, 65, 68);\n"
@@ -220,7 +209,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                        "color: rgb(255, 255, 255);\n"
                                        "font: 87 8pt \"Segoe UI Black\";")
         self.ActionClose.setObjectName("ActionClose")
-        self.ActionHide = HoverButton(self.CentralWidget)
+        self.ActionHide = PYQTHoverButton(self.CentralWidget)
         self.ActionHide.setGeometry(QtCore.QRect(255, 5, 31, 26))
         self.ActionHide.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.ActionHide.setStyleSheet("background-color: rgb(47, 49, 54);\n"
@@ -228,15 +217,21 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                       "color: rgb(255, 255, 255);\n"
                                       "font: 87 12pt \"Segoe UI Black\";")
         self.ActionHide.setObjectName("ActionHide")
-        self.MoveIndicator = QtWidgets.QLabel(self.CentralWidget)
-        self.MoveIndicator.setGeometry(QtCore.QRect(100, 15, 121, 3))
-        self.MoveIndicator.setStyleSheet("background-color: rgb(75, 75, 75);\n"
-                                         "border-radius: 1")
-        self.MoveIndicator.setObjectName("MoveIndicator")
+        self.WindowTitle = QtWidgets.QLabel(self.CentralWidget)
+        self.WindowTitle.setGeometry(QtCore.QRect(15, 7, 200, 21))
+        self.WindowTitle.setStyleSheet("color: rgb(175, 177, 181);\n"
+                                           "font: 87 10pt \"Segoe UI Black\";")
+        self.StatusInputHint.setStyleSheet("color: rgb(175, 177, 181);\n"
+                                           "font: 87 8pt \"Segoe UI Black\";")
+        self.WindowTitle.setAlignment(QtCore.Qt.AlignLeading
+                                          | QtCore.Qt.AlignLeft
+                                          | QtCore.Qt.AlignVCenter)
+        self.WindowTitle.setObjectName("WindowTitle")
+        self.WindowTitle.setText('Animated status')
+
         Window.setCentralWidget(self.CentralWidget)
 
         Window.setWindowTitle("Animated status")
-        self.MainTitle.setText("Animated status by Its-MatriX")
         self.AuthInputHint.setText("ТОКЕН УЧЁТНОЙ ЗАПИСИ")
         self.StatusInputHint.setText("СТАТУСЫ (ПО ОДНОМУ НА СТРОКУ)")
         self.DelayHint.setText("ЗАДЕРЖКА")
@@ -252,9 +247,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.QuitButton.clicked.connect(self.WindowClose)
         self.ActionHide.clicked.connect(self.WindowHide)
 
-        self.ActionClose.hover.connect(self.CloseButtonHover)
-        self.ActionHide.hover.connect(self.HideButtonHover)
-        self.WorkerButton.hover.connect(self.MainButtonHover)
+        self.ActionClose.HoverSignal.connect(self.CloseButtonHover)
+        self.ActionHide.HoverSignal.connect(self.HideButtonHover)
+        self.WorkerButton.HoverSignal.connect(self.MainButtonHover)
 
         self.MainButtonChangeSignal.connect(self.MainButtonChangeEvent)
         self.TokenInputHintChangeSignal.connect(self.TokenInputChangeEvent)
