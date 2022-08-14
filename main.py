@@ -534,12 +534,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
         self.IsPaschal = False
 
-        self.WorkerButton.setStyleSheet(
-            "background-color: rgb(88, 101, 242);\n"
-            "border-radius: 3;\n"
-            "color: rgb(255, 255, 255);\n"
-            "font: 87 8pt \"Segoe UI Black\";")
-        self.WorkerButton.setText('Пуск')
+        if not self.IsWorking:
+            self.WorkerButton.setStyleSheet(
+                "background-color: rgb(88, 101, 242);\n"
+                "border-radius: 3;\n"
+                "color: rgb(255, 255, 255);\n"
+                "font: 87 8pt \"Segoe UI Black\";")
+            self.WorkerButton.setText('Пуск')
 
     def MainButtonHover(self, event):
         if not self.IsWorking and not self.IsCkecking:
