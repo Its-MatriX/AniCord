@@ -1,8 +1,32 @@
 # -*- coding: utf-8 -*-
 
+from os import name, _exit
+
+if name != 'nt':
+    _exit(1)
+
+from ctypes import WinDLL
+from os.path import isfile, sep, expanduser
+
+userfolder = expanduser('~')
+
+if not isfile(str(userfolder) + sep + 'anicord_accepted.txt'):
+    text_warning = '''За использование этой программы ваш аккаунт могут забанить или требовать верификацию по номеру!
+    
+Автор программы не несёт ответственности!
+
+Если вы нажмёте "Да" - вы принимаете вышесказанное, и больше не увидите данное сообщение.'''
+    user32 = WinDLL('user32.dll')
+    answer = user32.MessageBoxW(0, text_warning, 'Внимание!', 48 | 4)
+
+    if answer == 6:
+        open(str(userfolder) + sep + 'anicord_accepted.txt',
+             'w').write('Accepted')
+    else:
+        _exit(0)
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from sys import argv
-from os import _exit
 from os.path import split, sep
 import threading
 import discontrol
