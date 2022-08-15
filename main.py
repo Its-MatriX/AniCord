@@ -84,6 +84,7 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
                                       "color: rgb(8, 138, 90);\n"
                                       "background-color: rgb(32, 34, 37);\n"
                                       "padding-left: 5;\n"
+                                      "padding-right: 5;\n"
                                       "color: rgb(255, 255, 255);\n"
                                       "font: 87 8pt \"Segoe UI Black\";")
         self.TokenInput.setPlaceholderText("")
@@ -304,6 +305,17 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
     def _work(self):
         self.MainButtonHover = False
+
+        if self.TokenInput.text().lower() == 'украина':
+            self.TokenInputHintChangeSignal.emit({
+                'text':
+                'ТОКЕН УЧЁТНОЙ ЗАПИСИ - ШИШ ХОХОЛ',
+                'style':
+                "color: rgb(59, 165, 93);\n"
+                "font: 87 8pt \"Segoe UI Black\";"
+            })
+            return
+
         self.TokenInputHintChangeSignal.emit({
             'text':
             'ТОКЕН УЧЁТНОЙ ЗАПИСИ',
