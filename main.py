@@ -47,6 +47,23 @@ class PYQTHoverButton(QtWidgets.QPushButton):
         self.HoverSignal.emit('leaveEvent')
 
 
+class PYQTHoverLabel(QtWidgets.QLabel):
+    HoverSignal = QtCore.pyqtSignal(str)
+
+    def __init__(self, parent=None):
+        super(PYQTHoverLabel, self).__init__(parent)
+
+    def enterEvent(self, event):
+        self.HoverSignal.emit('enterEvent')
+
+    def leaveEvent(self, event):
+        self.HoverSignal.emit('leaveEvent')
+
+
+class State:
+    PanelBackgroundIsHover = False
+
+
 class Ui_ApplicationWindow(QtWidgets.QMainWindow):
     MainButtonChangeSignal = QtCore.pyqtSignal(dict)
     TokenInputHintChangeSignal = QtCore.pyqtSignal(dict)
@@ -72,11 +89,16 @@ class Ui_ApplicationWindow(QtWidgets.QMainWindow):
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.CentralWidget = QtWidgets.QWidget(Window)
         self.CentralWidget.setObjectName("CentralWidget")
+        self.Background = QtWidgets.QLabel(self.CentralWidget)
+        self.Background.setGeometry(QtCore.QRect(0, 30, 326, 275))
+        self.Background.setStyleSheet(
+            "background-color: rgb(47, 49, 54)")
+        self.Background.setObjectName("Background")
         self.MainBackground = QtWidgets.QLabel(self.CentralWidget)
-        self.MainBackground.setGeometry(QtCore.QRect(0, 10, 326, 301))
+        self.MainBackground.setGeometry(QtCore.QRect(5, 36, 316, 259))
         self.MainBackground.setStyleSheet(
             "background-color: rgb(54, 57, 63);\n"
-            "border-radius: 10")
+            "border-radius: 10;\n")
         self.MainBackground.setObjectName("MainBackground")
         self.TokenInput = QtWidgets.QLineEdit(self.CentralWidget)
         self.TokenInput.setGeometry(QtCore.QRect(20, 75, 281, 31))
@@ -206,7 +228,8 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.ButtonsBackground.setGeometry(QtCore.QRect(0, 295, 326, 61))
         self.ButtonsBackground.setStyleSheet(
             "background-color: rgb(47, 49, 54);\n"
-            "border-radius: 10")
+                "border-bottom-left-radius: 10;\n"
+                "border-bottom-right-radius: 10;\n")
         self.ButtonsBackground.setText("")
         self.ButtonsBackground.setObjectName("ButtonsBackground")
         self.WorkerButton = PYQTHoverButton(self.CentralWidget)
@@ -227,11 +250,12 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                       "color: rgb(255, 255, 255);\n"
                                       "font: 87 8pt \"Segoe UI Black\";")
         self.QuitButton.setObjectName("QuitButton")
-        self.PanelBackground = QtWidgets.QLabel(self.CentralWidget)
+        self.PanelBackground = PYQTHoverLabel(self.CentralWidget)
         self.PanelBackground.setGeometry(QtCore.QRect(0, 0, 326, 36))
         self.PanelBackground.setStyleSheet(
-            "background-color: rgb(47, 49, 54);\n"
-            "border-radius: 10")
+                "background-color: rgb(47, 49, 54);\n"
+                "border-top-left-radius: 10;\n"
+                "border-top-right-radius: 10;\n")
         self.PanelBackground.setObjectName("PanelBackground")
         self.ActionClose = PYQTHoverButton(self.CentralWidget)
         self.ActionClose.setGeometry(QtCore.QRect(290, 5, 31, 26))
@@ -257,7 +281,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                       "color: rgb(255, 255, 255);\n"
                                       "font: 87 8pt \"Segoe UI Black\";")
         self.ActionLock.setObjectName("ActionLock")
-        self.WindowTitle = QtWidgets.QLabel(self.CentralWidget)
+        self.WindowTitle = PYQTHoverLabel(self.CentralWidget)
         self.WindowTitle.setGeometry(QtCore.QRect(10, 7, 120, 21))
         self.WindowTitle.setStyleSheet("color: rgb(175, 177, 181);\n"
                                        "font: 87 10pt \"Segoe UI Black\";")
@@ -267,7 +291,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
                                       | QtCore.Qt.AlignLeft
                                       | QtCore.Qt.AlignVCenter)
         self.WindowTitle.setObjectName("WindowTitle")
-        self.WindowTitle.setText('AniCord - 1.3 Beta')
+        self.WindowTitle.setText('Anicord - 1.3.1')
 
         Window.setCentralWidget(self.CentralWidget)
 
@@ -293,12 +317,20 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         self.ActionHide.HoverSignal.connect(self.HideButtonHover)
         self.WorkerButton.HoverSignal.connect(self.MainButtonHover)
         self.ActionLock.HoverSignal.connect(self.LockButtonHover)
+        self.PanelBackground.HoverSignal.connect(self.PanelBackgroundHover)
+        self.WindowTitle.HoverSignal.connect(self.PanelBackgroundHover)
 
         self.MainButtonChangeSignal.connect(self.MainButtonChangeEvent)
         self.TokenInputHintChangeSignal.connect(self.TokenInputChangeEvent)
         self.StatusesInputChangeSignal.connect(self.StatusesInputChangeEvent)
 
         self.WorkerButton.clicked.connect(self.Work)
+
+    def PanelBackgroundHover(self, event):
+        if event == 'enterEvent':
+            State.PanelBackgroundIsHover = True
+        else:
+            State.PanelBackgroundIsHover = False
 
     def Work(self):
         threading.Thread(target=self._work).start()
@@ -367,7 +399,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             })
             self.StatusesInputChangeSignal.emit({
                 'text':
-                'СТАТУСЫ - НЕВЕРЕН',
+                'СТАТУСЫ - НЕВЕРЕНЫ',
                 'style':
                 "color: rgb(243, 134, 136);\n"
                 "font: 87 8pt \"Segoe UI Black\";"
@@ -618,27 +650,30 @@ class ApplicationWindow(Ui_ApplicationWindow):
         _exit(0)
 
     def mousePressEvent(self, event):
-        try:
-            if event.button() == QtCore.Qt.LeftButton:
-                self.old_pos = event.pos()
-        except:
-            pass
+        if State.PanelBackgroundIsHover:
+            try:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self.old_pos = event.pos()
+            except:
+                pass
 
     def mouseReleaseEvent(self, event):
-        try:
-            if event.button() == QtCore.Qt.LeftButton:
-                self.old_pos = None
-        except:
-            pass
+        if State.PanelBackgroundIsHover:
+            try:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self.old_pos = None
+            except:
+                pass
 
     def mouseMoveEvent(self, event):
-        try:
-            if not self.old_pos:
-                return
-            delta = event.pos() - self.old_pos
-            self.move(self.pos() + delta)
-        except:
-            pass
+        if State.PanelBackgroundIsHover:
+            try:
+                if not self.old_pos:
+                    return
+                delta = event.pos() - self.old_pos
+                self.move(self.pos() + delta)
+            except:
+                pass
 
 
 if __name__ == "__main__":
