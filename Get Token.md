@@ -8,3 +8,14 @@
 6. Жмём на него
 7. Ищем в заголовках Authorization
 8. Вставляем значение из Authorization
+
+# Более удобный вариант
+
+1. Открываем браузерную версию Discord
+2. Нажимаем Ctrl+Shift+I
+3. Переходим в консоль
+4. Вводим нижеуказанный код
+```js
+(webpackChunkdiscord_app.push([[''],{},e=>{m=[];for(let c in e.c)m.push(e.c[c])}]),m).find(m=>m?.exports?.default?.getToken!==void 0).exports.default.getToken()
+```
+5. Вставляем в программу (без кавычек)
